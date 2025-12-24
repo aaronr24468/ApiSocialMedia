@@ -8,20 +8,20 @@ export const webSocket = () => {
     wss.on('connection', (ws) => {
         ws.on('message', (message) => {
             const data = JSON.parse(message);
-            //console.log(data, "dawdaw")
+            console.log(data)
             let msg;
 
             switch (data.type) {
                 case "join":
                     connections[data.name] = ws;
-                    imageConnection[data.name] = data.image 
+                    imageConnection[data.name] = data.image
                     msg = JSON.stringify({
                         "type": 'join',
-                        "names": Object.values(connections),
+                        "names": Object.keys(connections),
                         "imageUsers": imageConnection
                     })
                     Object.values(connections).forEach((connection) => {
-                        connection.send() && connection.send(msg)
+                        connection.send && connection.send(msg)
                     })
                     break;
 
@@ -40,17 +40,17 @@ export const webSocket = () => {
 
                     }
                     break;
-                
+
                 case 'logout':
                     delete connections[data.name]
                     delete imageConnection[data.name]
                     msg = JSON.stringify({
-                        "type": "logout",
-                        "names": Object.values(connections),
+                        "type": "join",
+                        "names": Object.keys(connections),
                         "imageUsers": imageConnection
                     })
-                    Object.values(connections).forEach((connection) =>{
-                        connection.send() && connection.send(msg)
+                    Object.values(connections).forEach((connection) => {
+                        connection.send && connection.send(msg)
                     })
                     break;
             }

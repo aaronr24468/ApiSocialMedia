@@ -12,7 +12,7 @@ import {config} from 'dotenv';
 config();
 
 const port = process.env.PORT
-
+ 
 const app = express();
 
 app.use(morgan('dev'));
@@ -32,9 +32,9 @@ app.get('/', (request, response) =>{
 app.use((err, request, response, next) =>{
     if(err.name === 'UnauthorizedError'){
         response.status(401).json('Unauthorized')
-    }else{
+    }else{ 
         next();
-    }
+    } 
 })
 
 webSocket();
