@@ -8,7 +8,7 @@ export const webSocket = () => {
     wss.on('connection', (ws) => {
         ws.on('message', (message) => {
             const data = JSON.parse(message);
-            console.log(data)
+            //console.log(data)
             let msg;
 
             switch (data.type) {

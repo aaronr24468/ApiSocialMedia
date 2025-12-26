@@ -36,3 +36,24 @@ export const likeC = async(data) =>{
     const [info] = await connection.query(query, [data.id])
     return(info);
 }
+
+export const saveM = async(data) =>{
+    const query = `SELECT * FROM chats WHERE user1=? AND user2=? OR user1=? AND user2=?`;
+    
+    const [res] = await connection.query(query, [data.user1, data.user2, data.user2, data.user1]);
+    if(res.length === 0){
+        const query = `INSERT INTO chats(user1, user2, chat)values(?,?,?)`;
+        await connection.query(query, [data.user1, data.user2, data.msg])
+    }else{
+        const chat = res[0].chat.concat(' '+data.msg)
+        const query =  `UPDATE chats SET chat=? WHERE id=?`;
+        await connection.query(query, [chat, res[0].id])
+    }
+}
+
+export const getM = async(info) =>{
+    const query = `SELECT chat FROM chats WHERE user1=? AND user2=? OR user1=? AND user2=?`;
+    const [res] = await connection.query(query, [info.user1, info.user2, info.user2, info.user1]);
+    return(res)
+    
+}

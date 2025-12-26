@@ -1,4 +1,4 @@
-import { getC, likeC, uploadI, uploadV } from "../models/userModels.mjs";
+import { getC, getM, likeC, saveM, uploadI, uploadV } from "../models/userModels.mjs";
 
 export const getUserData = (request, response) =>{
     try {
@@ -84,6 +84,47 @@ export const likeContent = async(request, response) =>{
         const res = await likeC(data)
         console.log(data.type)
         response.status(200).json(res)
+    } catch (e) {
+        console.error(e);
+        response.status(401).json('F')
+    }
+}
+
+export const saveMessage = async(request, response) =>{
+    try {
+        const data = {
+            user1: request.body.user1,
+            user2: request.body.user2,
+            msg: `${request.body.user1}~${request.body.msg}`
+        }
+
+        data.msg = data.msg.replace(/\s/g, "|");
+
+        await saveM(data)
+        response.status(200).json('S')
+        
+    } catch (e) {
+        console.error(e);
+        response.status(401).json('F')
+    }
+}
+
+export const getMessage = async(request, response) =>{
+    try {
+        const info = {
+            user1: request.body.user1,
+            user2: request.body.user2,
+        }
+        const chat = await getM(info);
+        
+        console.log(chat.length)
+        if(chat.length!=0){
+            const splitData = chat[0].chat.split(' ');
+            response.status(200).json(splitData)
+        }else{
+            response.status(200).json("EMPTY")
+        }
+        
     } catch (e) {
         console.error(e);
         response.status(401).json('F')

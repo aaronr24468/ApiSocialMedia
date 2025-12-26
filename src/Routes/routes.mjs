@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import {dirname, join} from 'path';
 import { fileURLToPath } from "url";
-import { getContent, getUserData, likeContent, uploadImage, uploadVideos } from "../controllers/controllers.mjs";
+import { getContent, getMessage, getUserData, likeContent, saveMessage, uploadImage, uploadVideos } from "../controllers/controllers.mjs";
 
 const diskStorageImages = multer.diskStorage({
     destination: join(dirname(fileURLToPath(import.meta.url)), '../media/userPhotos'),
@@ -38,3 +38,7 @@ router.post('/uploadPhoto/:info', getImage, uploadImage);
 router.post('/uploadVideo/:info', getVideos, uploadVideos);
 
 router.post('/likeContent/:id', likeContent);
+
+router.post('/saveMessage', saveMessage);
+
+router.post('/getMessage', getMessage);
