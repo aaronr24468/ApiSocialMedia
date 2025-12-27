@@ -55,5 +55,10 @@ export const getM = async(info) =>{
     const query = `SELECT chat FROM chats WHERE user1=? AND user2=? OR user1=? AND user2=?`;
     const [res] = await connection.query(query, [info.user1, info.user2, info.user2, info.user1]);
     return(res)
-    
+};
+
+export const getListU = async() =>{
+    const query = 'SELECT username, image from users';
+    const [users] = await connection.query(query);
+    return(users)
 }

@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import {dirname, join} from 'path';
 import { fileURLToPath } from "url";
-import { getContent, getMessage, getUserData, likeContent, saveMessage, uploadImage, uploadVideos } from "../controllers/controllers.mjs";
+import { getContent, getListUsers, getMessage, getUserData, likeContent, saveMessage, uploadImage, uploadVideos } from "../controllers/controllers.mjs";
 
 const diskStorageImages = multer.diskStorage({
     destination: join(dirname(fileURLToPath(import.meta.url)), '../media/userPhotos'),
@@ -29,7 +29,7 @@ const getVideos = multer({
 
 export const router = Router();
 
-router.get('/getUser', getUserData);
+router.get('/getUser', getUserData); //aqui optenemos toda la informacion del usuario para poder tener la url y objetos que ocupemos para guardar y tener acceso en la pagina
 
 router.get('/getContent/:type', getContent)
 
@@ -42,3 +42,5 @@ router.post('/likeContent/:id', likeContent);
 router.post('/saveMessage', saveMessage);
 
 router.post('/getMessage', getMessage);
+
+router.post('/getListUsers', getListUsers)
