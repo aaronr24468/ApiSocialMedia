@@ -20,14 +20,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(dirname(fileURLToPath(import.meta.url))));
-
+ 
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
 app.use('/v1/social',expressjwt({secret:'secret', algorithms: ["HS256"]}), infoRouter)
 
-// app.get('/', (request, response) =>{
-//     response.redirect('/v1/social')
-// })
+app.get('/', (request, response) =>{
+    response.redirect('/v1/social')
+})
 
 app.use((err, request, response, next) =>{
     if(err.name === 'UnauthorizedError'){
@@ -41,4 +41,4 @@ webSocket();
 
 app.listen(8080, () =>{
     console.log(`Listening to the http://localhost:${port}`);
-})
+}) 
