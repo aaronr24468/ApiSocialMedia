@@ -3,7 +3,7 @@ import { WebSocketServer } from "ws";
 // config();
 
 export const webSocket = (server) => {
-    const wss = new WebSocketServer({ server }); //puerto no puede ser el mismo que el puerto de la api en si
+    const wss = new WebSocketServer({ server, path: "/ws" }); //puerto no puede ser el mismo que el puerto de la api en si
     const connections = {};
     let imageConnection = {}
 

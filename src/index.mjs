@@ -2,45 +2,102 @@ import express from "express";
 import http from 'http';
 import { expressjwt } from "express-jwt";
 import cors from 'cors';
-import {dirname, join} from 'path';
+import { dirname, join } from 'path';
 import { fileURLToPath } from "url";
 import morgan from "morgan";
 import { router as registerRouter } from "./Routes/registerRouter.mjs";
 import { router as loginRouter } from "./Routes/loginRouter.mjs";
 import { router as infoRouter } from "./Routes/routes.mjs";
-import { webSocket } from "./webSocket.mjs";
-import {config} from 'dotenv';
+//import { webSocket } from "./webSocket.mjs";
+import { WebSocketServer } from "ws";
+import { config } from 'dotenv';
 config();
 
 const port = process.env.PORT
- 
+
 const app = express();
 const server = http.createServer(app)
 
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static(dirname(fileURLToPath(import.meta.url))));
- 
+
 app.use('/register', registerRouter);
 app.use('/login', loginRouter);
-app.use('/v1/social',expressjwt({secret:'secret', algorithms: ["HS256"]}), infoRouter)
+app.use('/v1/social', expressjwt({ secret: 'secret', algorithms: ["HS256"] }), infoRouter)
 
 // app.get('/', (request, response) =>{
 //     response.redirect('/v1/social')
 // })
 
-app.use((err, request, response, next) =>{
-    if(err.name === 'UnauthorizedError'){
+app.use((err, request, response, next) => {
+    if (err.name === 'UnauthorizedError') {
         response.status(401).json('Unauthorized')
-    }else{ 
+    } else {
         next();
-    } 
+    }
 })
 
-webSocket(server); 
+const wss = new WebSocketServer({ server, path: "/ws" }); //puerto no puede ser el mismo que el puerto de la api en si
+const connections = {};
+let imageConnection = {}
 
-app.listen(port, () =>{
+wss.on('connection', (ws) => {
+    ws.on('message', (message) => {
+        const data = JSON.parse(message);
+        //console.log(data)
+        let msg;
+
+        switch (data.type) {
+            case "join":
+                connections[data.name] = ws;
+                imageConnection[data.name] = data.image
+                msg = JSON.stringify({
+                    "type": 'join',
+                    "names": Object.keys(connections),
+                    "imageUsers": imageConnection
+                })
+                Object.values(connections).forEach((connection) => {
+                    connection.send && connection.send(msg)
+                })
+                break;
+
+            case "msg":
+                if (data.recieve.length > 0) {
+                    connections[data.name].send(msg = JSON.stringify({
+                        "type": 'msg',
+                        "name": data.name,
+                        "msg": data.msg
+                    }))
+                    connections[data.recieve].send(msg = JSON.stringify({
+                        "type": 'msg',
+                        "name": data.name,
+                        "msg": data.msg
+                    }))
+
+                }
+                break;
+
+            case 'logout':
+                delete connections[data.name]
+                delete imageConnection[data.name]
+                msg = JSON.stringify({
+                    "type": "join",
+                    "names": Object.keys(connections),
+                    "imageUsers": imageConnection
+                })
+                Object.values(connections).forEach((connection) => {
+                    connection.send && connection.send(msg)
+                })
+                break;
+        }
+    })
+})
+
+//webSocket(server); 
+
+app.listen(port, () => {
     console.log(`Listening to the http://localhost:${port}`);
 }) 
