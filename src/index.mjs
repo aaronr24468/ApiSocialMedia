@@ -41,6 +41,6 @@ app.use((err, request, response, next) =>{
 
 webSocket(server); 
 
-app.listen(8080, () =>{
+app.listen(port, () =>{
     console.log(`Listening to the http://localhost:${port}`);
 }) 
