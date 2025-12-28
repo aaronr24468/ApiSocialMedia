@@ -8,8 +8,8 @@ import morgan from "morgan";
 import { router as registerRouter } from "./Routes/registerRouter.mjs";
 import { router as loginRouter } from "./Routes/loginRouter.mjs";
 import { router as infoRouter } from "./Routes/routes.mjs";
-//import { webSocket } from "./webSocket.mjs";
-import { WebSocketServer } from "ws";
+import { webSocket } from "./webSocket.mjs";
+//import { WebSocketServer } from "ws";
 import { config } from 'dotenv';
 config();
 
@@ -40,63 +40,63 @@ app.use((err, request, response, next) => {
     }
 })
 
-const wss = new WebSocketServer({ server }); //puerto no puede ser el mismo que el puerto de la api en si
-const connections = {};
-let imageConnection = {}
+// const wss = new WebSocketServer({ server }); //puerto no puede ser el mismo que el puerto de la api en si
+// const connections = {};
+// let imageConnection = {}
 
-wss.on('connection', (ws) => {
-    ws.on('message', (message) => {
-        const data = JSON.parse(message);
-        //console.log(data)
-        let msg;
+// wss.on('connection', (ws) => {
+//     ws.on('message', (message) => {
+//         const data = JSON.parse(message);
+//         //console.log(data)
+//         let msg;
 
-        switch (data.type) {
-            case "join":
-                connections[data.name] = ws;
-                imageConnection[data.name] = data.image
-                msg = JSON.stringify({
-                    "type": 'join',
-                    "names": Object.keys(connections),
-                    "imageUsers": imageConnection
-                })
-                Object.values(connections).forEach((connection) => {
-                    connection.send && connection.send(msg)
-                })
-                break;
+//         switch (data.type) {
+//             case "join":
+//                 connections[data.name] = ws;
+//                 imageConnection[data.name] = data.image
+//                 msg = JSON.stringify({
+//                     "type": 'join',
+//                     "names": Object.keys(connections),
+//                     "imageUsers": imageConnection
+//                 })
+//                 Object.values(connections).forEach((connection) => {
+//                     connection.send && connection.send(msg)
+//                 })
+//                 break;
 
-            case "msg":
-                if (data.recieve.length > 0) {
-                    connections[data.name].send(msg = JSON.stringify({
-                        "type": 'msg',
-                        "name": data.name,
-                        "msg": data.msg
-                    }))
-                    connections[data.recieve].send(msg = JSON.stringify({
-                        "type": 'msg',
-                        "name": data.name,
-                        "msg": data.msg
-                    }))
+//             case "msg":
+//                 if (data.recieve.length > 0) {
+//                     connections[data.name].send(msg = JSON.stringify({
+//                         "type": 'msg',
+//                         "name": data.name,
+//                         "msg": data.msg
+//                     }))
+//                     connections[data.recieve].send(msg = JSON.stringify({
+//                         "type": 'msg',
+//                         "name": data.name,
+//                         "msg": data.msg
+//                     }))
 
-                }
-                break;
+//                 }
+//                 break;
 
-            case 'logout':
-                delete connections[data.name]
-                delete imageConnection[data.name]
-                msg = JSON.stringify({
-                    "type": "join",
-                    "names": Object.keys(connections),
-                    "imageUsers": imageConnection
-                })
-                Object.values(connections).forEach((connection) => {
-                    connection.send && connection.send(msg)
-                })
-                break;
-        }
-    })
-})
+//             case 'logout':
+//                 delete connections[data.name]
+//                 delete imageConnection[data.name]
+//                 msg = JSON.stringify({
+//                     "type": "join",
+//                     "names": Object.keys(connections),
+//                     "imageUsers": imageConnection
+//                 })
+//                 Object.values(connections).forEach((connection) => {
+//                     connection.send && connection.send(msg)
+//                 })
+//                 break;
+//         }
+//     })
+// })
 
-//webSocket(server); 
+webSocket(server); 
 
 server.listen(port, () => {
     console.log(`Listening to the http://localhost:${port}`);
