@@ -1,4 +1,5 @@
 import express from "express";
+import http from 'http';
 import { expressjwt } from "express-jwt";
 import cors from 'cors';
 import {dirname, join} from 'path';
@@ -14,6 +15,7 @@ config();
 const port = process.env.PORT
  
 const app = express();
+const server = http.createServer(app)
 
 app.use(morgan('dev'));
 app.use(cors());
@@ -37,7 +39,7 @@ app.use((err, request, response, next) =>{
     } 
 })
 
-webSocket(); 
+webSocket(server); 
 
 app.listen(8080, () =>{
     console.log(`Listening to the http://localhost:${port}`);

@@ -2,8 +2,8 @@ import { WebSocketServer } from "ws";
 // import {config} from 'dotenv';
 // config();
 
-export const webSocket = () => {
-    const wss = new WebSocketServer({ port: 8181}); //puerto no puede ser el mismo que el puerto de la api en si
+export const webSocket = (server) => {
+    const wss = new WebSocketServer({ server }); //puerto no puede ser el mismo que el puerto de la api en si
     const connections = {};
     let imageConnection = {}
 
