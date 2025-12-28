@@ -1,7 +1,9 @@
 import { WebSocketServer } from "ws";
+import {config} from 'dotenv';
+config();
 
 export const webSocket = () => {
-    const wss = new WebSocketServer({ port: 8181 });
+    const wss = new WebSocketServer({ port: process.env.PORT });
     const connections = {};
     let imageConnection = {}
 
