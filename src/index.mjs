@@ -40,7 +40,7 @@ app.use((err, request, response, next) => {
     }
 })
 
-const wss = new WebSocketServer({ server, path: "/ws" }); //puerto no puede ser el mismo que el puerto de la api en si
+const wss = new WebSocketServer({ server }); //puerto no puede ser el mismo que el puerto de la api en si
 const connections = {};
 let imageConnection = {}
 
@@ -98,6 +98,6 @@ wss.on('connection', (ws) => {
 
 //webSocket(server); 
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Listening to the http://localhost:${port}`);
 }) 
