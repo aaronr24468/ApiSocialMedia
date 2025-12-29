@@ -38,7 +38,7 @@ export const uploadImage = async(request, response) =>{
             date: dateSlice,
             likes: '',
             comments: '',
-            photo:`http://localhost:8080/media/userPhotos/${request.files[0].filename}`
+            photo:`https://apisocialmedia-oesl.onrender.com/media/userPhotos/${request.files[0].filename}`
         }
         //console.log(request)
         await uploadI(data)
@@ -64,7 +64,7 @@ export const uploadVideos = async(request, response) =>{
             date: dateSlice,
             likes: '',
             comments: '',
-            video:`http://localhost:8080/media/userVideos/${request.file.filename}`
+            video:`https://apisocialmedia-oesl.onrender.com/media/userVideos/${request.file.filename}`
         }
         await uploadV(data)
         response.status(200).json('S')
