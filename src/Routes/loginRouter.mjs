@@ -16,7 +16,11 @@ router.post('/', async (request, response) => {
         bcrypt.compare(data.password, user[0].password, (err, result) => {
             if (result === true) {
                 const token = jwt.sign(user[0], 'secret');
-                response.status(200).json(token)
+                response.cookie("socialMediaToken", token,{
+                    httpOnly: true,
+                   
+                })
+                response.status(200).json({login: true})
             } else {
                 response.status(405).json('F')
             }

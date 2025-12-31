@@ -2,11 +2,21 @@ import { getC, getListU, getM, likeC, saveM, uploadI, uploadV } from "../models/
 
 export const getUserData = (request, response) =>{
     try {
-        //console.log(request.auth)
+        //console.log(request.cookies)
         response.status(200).json(request.auth)
     } catch (e) {
         console.error(e);
         response.status(401).json('F')
+    }
+}
+
+export const validUser = (request, response ) =>{
+    try {
+        const token = request.cookies.socialMediaToken;
+        console.log(token)
+        response.status(200).json({login: true})
+    } catch (e) {
+        response.status(401).json('Unauthorized')
     }
 }
 
@@ -149,5 +159,15 @@ export const getListUsers = async(request, response) =>{
     } catch (e) {
         console.error(e);
         response.status(401).json('F')
+    }
+}
+
+export const logOut = (request, response) =>{
+    try {
+        response.clearCookie('socialMediaToken');
+        response.status(200).json({logout: true})
+    } catch (e) {
+        console.error(e);
+        response.status.json({logout: false})
     }
 }
