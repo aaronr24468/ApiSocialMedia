@@ -21,7 +21,7 @@ const server = http.createServer(app)
 
 app.use(morgan('dev'));
 app.use(cors({
-    origin: 'https://apisocialmedia-oesl.onrender.com',
+    origin: 'http://localhost:5173',
     credentials: true
 }));
 app.use(cookieParser());
