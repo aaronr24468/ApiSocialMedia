@@ -18,7 +18,8 @@ router.post('/', async (request, response) => {
                 const token = jwt.sign(user[0], 'secret');
                 response.cookie("socialMediaToken", token,{
                     httpOnly: true,
-                   
+                    secure: true,
+                    sameSite: 'none'
                 })
                 response.status(200).json({login: true})
             } else {
