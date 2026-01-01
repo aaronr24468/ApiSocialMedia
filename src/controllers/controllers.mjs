@@ -164,7 +164,11 @@ export const getListUsers = async(request, response) =>{
 
 export const logOut = (request, response) =>{
     try {
-        response.clearCookie('socialMediaToken');
+        response.clearCookie('socialMediaToken',{
+            secure: true,
+            sameSite: "none",
+            partitioned: true
+        });
         response.status(200).json({logout: true})
     } catch (e) {
         console.error(e);
