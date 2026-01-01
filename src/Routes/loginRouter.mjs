@@ -19,7 +19,7 @@ router.post('/', async (request, response) => {
                 response.cookie("socialMediaToken", token,{ //le mandamos la cookie a el navegador con la key socialMediaToken y el valor del token
                     httpOnly: true, //le decimos que solo se puede acceder a la cookie por medio de consultas http, solo se puede consultar las cookies desde el backend
                     secure: true, //poner en falso cuando estemos haciendo pruebas y en true cuando este en produccion si no dara error de cors
-                    sameSite: 'none' //le decimos que el dominio es igual o no es igual al backend
+                    sameSite: 'lax', //le decimos que el dominio es igual o no es igual al backend
                 })
                 response.status(200).json({login: true}) //le respondemos con un objeto diciendo que el login es correcto con un true
             } else {
