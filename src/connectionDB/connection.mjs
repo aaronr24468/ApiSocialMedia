@@ -10,5 +10,6 @@ export const connectionDB = mysql.createPool({
 
     waitForConnections: true,
     connectionLimit: 5,
-    queueLimit: 0
+    queueLimit: 0,
+    connectTimeout: 10000
 })
