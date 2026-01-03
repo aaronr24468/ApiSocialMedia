@@ -3,7 +3,7 @@ import { getC, getListU, getM, likeC, saveM, uploadI, uploadV } from "../models/
 export const getUserData = (request, response) =>{
     try {
         //console.log(request.cookies)
-        response.status(200).json(request.auth)
+        response.status(200).json(request.auth) //mandamos toda la info del usuario desde la informacion guardada en el token
     } catch (e) {
         console.error(e);
         response.status(401).json('F')
@@ -12,21 +12,21 @@ export const getUserData = (request, response) =>{
 
 export const validUser = (request, response ) =>{
     try {
-        const token = request.cookies.socialMediaToken;
+        const token = request.cookies.socialMediaToken; //obtenemos el token de las cookies del navegador por medio de credentials en el http request
         console.log(token)
-        response.status(200).json({login: true})
+        response.status(200).json({login: true})// si se encuentra el token mandaremos esto, de lo contrario se mandara un mensaje
     } catch (e) {
         response.status(401).json('Unauthorized')
     }
 }
 
-export const getContent = async(request, response) =>{
+export const getContent = async(request, response) =>{ //obtenemos el contenido que el usuario elija, videos o imagenes por medio del type
     try {
         const data = {
             user: request.auth.username,
             type: request.params.type
         }
-        const constent = await getC(data);
+        const constent = await getC(data); //llamamos el metodo getC para obtener la info de la DB
         response.status(200).json(constent)
     } catch (e) {
         console.error(e);
@@ -36,11 +36,11 @@ export const getContent = async(request, response) =>{
 
 export const uploadImage = async(request, response) =>{
     try {
-        const info = request.params.info.split("&")
-        const userData = request.auth;
-        const date = new Date();
-        const dateSlice = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
-        const data = {
+        const info = request.params.info.split("&");//separamos la info que nos manda de los parametros del endPoint, titulo y descripccion
+        const userData = request.auth; //obtenemos la info del usuario por medio de auth, esto es por medio de JWT
+        const date = new Date(); //inicializamos el metodo de fechas de JS
+        const dateSlice = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`; //creamos una variable que alberga la fecha en dia, mes y year
+        const data = { //creamos un objeto el cual guarda toda la info que mandaremos a la DB
             user: userData.username,
             imageUser: userData.image,
             title: info[0],
@@ -48,10 +48,10 @@ export const uploadImage = async(request, response) =>{
             date: dateSlice,
             likes: '',
             comments: '',
-            photo:`https://apisocialmedia-oesl.onrender.com/media/userPhotos/${request.files[0].filename}`
+            photo:`https://apisocialmedia-oesl.onrender.com/media/userPhotos/${request.files[0].filename}` //ponermos el url y por medio de request obtenemos el nombre del la imagen
         }
         //console.log(request)
-        await uploadI(data)
+        await uploadI(data) //usamos el metodo y le mandamos data
         response.status(200).json('S')
     } catch (e) {
         console.error(e)
@@ -164,7 +164,7 @@ export const getListUsers = async(request, response) =>{
 
 export const logOut = (request, response) =>{
     try {
-        response.clearCookie('socialMediaToken',{
+        response.clearCookie('socialMediaToken',{ //eliminamos la cookie, es importante tener los mismos parametros menos httpOnly para poder eliminar la cookie del navegador
             secure: true,
             sameSite: "none",
             partitioned: true

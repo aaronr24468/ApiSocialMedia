@@ -35,16 +35,16 @@ router.get('/validToken', validUser) //endpoint para validar si el usuario sigue
 
 router.get('/getContent/:type', getContent) //obtenemos imagenes o videos dependiendo el type que se mande del fron
 
-router.post('/uploadPhoto/:info', getImage, uploadImage);
+router.post('/uploadPhoto/:info', getImage, uploadImage); //obtenemos la imagen por getImage y con uploadImage subimos el url de donde se aloja
 
-router.post('/uploadVideo/:info', getVideos, uploadVideos);
+router.post('/uploadVideo/:info', getVideos, uploadVideos); //obtenemos la video por getVideos y con uploadVideos subimos el url de donde se aloja
 
 router.post('/likeContent/:id', likeContent);
 
-router.post('/saveMessage', saveMessage);
+router.post('/saveMessage', saveMessage);// guardamos los mensajes de los usuarios en la DB
 
-router.post('/getMessage', getMessage);
+router.post('/getMessage', getMessage); //hacemos un request para obtener los mensajes de los usuarios
 
-router.post('/getListUsers', getListUsers)
+router.post('/getListUsers', getListUsers) //obtenemos la lista de usuaios que esten en la plataforma
 
-router.get('/logout', logOut)
+router.get('/logout', logOut) //eliminamos la cookie de el token para hacer logout

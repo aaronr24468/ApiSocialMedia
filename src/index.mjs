@@ -20,10 +20,12 @@ const app = express(); //se inicializa expres por medio de la variable app
 const server = http.createServer(app)//inicializamos un server
 
 app.use(morgan('dev'));
+
 app.use(cors({ //ocupamos las caracteristicas del cors para cuando usamos cookies
     origin: 'http://localhost:5173', //el dominio del fron end
     credentials: true //nos permite enviar datos sencibles del front al back, esto se tiene que activar igual en cualquier peticion en el front y ponerle include
 }));
+
 app.use(cookieParser()); //inicializamos cookieParser
 app.use(express.json()); //le decimos que aceptamos datos tipos json que se manden desde una peticion http
 app.use(express.urlencoded({ extended: false }));

@@ -20,7 +20,7 @@ router.post('/', async (request, response) => {
                     httpOnly: true, //le decimos que solo se puede acceder a la cookie por medio de consultas http, solo se puede consultar las cookies desde el backend
                     secure: true, //poner en falso cuando estemos haciendo pruebas y en true cuando este en produccion si no dara error de cors
                     sameSite: 'none', //le decimos que el dominio es igual o no es igual al backend
-                    partitioned: true
+                    partitioned: true //para que acepte thirdcookies
                 })
                 response.status(200).json({login: true}) //le respondemos con un objeto diciendo que el login es correcto con un true
             } else {
