@@ -22,7 +22,7 @@ const server = http.createServer(app)//inicializamos un server
 app.use(morgan('dev'));
 
 app.use(cors({ //ocupamos las caracteristicas del cors para cuando usamos cookies
-    origin: 'https://socialmediaweb-q9ug.onrender.com', //el dominio del fron end
+    origin: 'http://localhost:5173/', //el dominio del fron end
     credentials: true //nos permite enviar datos sencibles del front al back, esto se tiene que activar igual en cualquier peticion en el front y ponerle include
 }));
 
